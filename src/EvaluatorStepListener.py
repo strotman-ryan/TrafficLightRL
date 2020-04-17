@@ -1,19 +1,14 @@
-
 import traci
 
+
 class EvaluatorStepListener(traci.StepListener):
-      
-      
-      def __init__(self, cars):
-      	    self.cars = cars
+
+      def __init__(self, evaluator):
+            self.evaluator = evaluator
             
       def step(self, t=0):
-            currentTime = traci.simulation.getTime();	
-	    self.cars.removeCars(traci.simulation.getArrivedIDList(),currentTime)
-            self.cars.addCars(traci.simulation.getDepartedIDList(), currentTime)
+            self.evaluator.evaluate()
             return True
 
-      def PrintResults(self):
-             print("total cars: " + str(self.cars.numCarsDeparted))
-             print("total travel time: " + str(self.cars.travelTimeCarsDeparted))
-             print("average travel time: " + str(self.cars.travelTimeCarsDeparted/self.cars.numCarsDeparted))
+      def print_results(self):
+            self.evaluator.print_results()

@@ -14,10 +14,13 @@ else:
 
 from sumolib import checkBinary
 import traci
-from CarsInSimulation import CarsInSimulation
+from Evaluator import Evaluator
 import traci.constants as tc
 from EvaluatorStepListener import EvaluatorStepListener
 from TrafficControllerStepListener import TrafficControllerStepListener
+from RlTlController import RlTlController
+from IntersectionState import IntersectionState
+from RLAgentQLearning import RLAgentQLearning
 
 def runSimulation():
     '''runSimulation(CarsInSimulation) -> none'''
@@ -35,10 +38,12 @@ def setUpSimulation():
 
 if __name__ == "__main__":
     setUpSimulation()
-    evaluator = EvaluatorStepListener(CarsInSimulation())
-    controller = TrafficControllerStepListener()
-    traci.addStepListener(evaluator)
-    traci.addStepListener(controller)
+    sl_evaluator = EvaluatorStepListener(Evaluator())
+    q_learning = RLAgentQLearning(.05, .2, .9)
+    state = IntersectionState("C")
+    controller = RlTlController(state, q_learning)
+    sl_controller = TrafficControllerStepListener(controller)
+    traci.addStepListener(sl_evaluator)
+    traci.addStepListener(sl_controller)
     runSimulation()
-    evaluator.PrintResults()
-    print(controller.stateActions)
+    sl_evaluator.print_results()
