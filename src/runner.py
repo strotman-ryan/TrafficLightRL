@@ -2,7 +2,7 @@
 #Author: Ryan Strotman
 #synopsis:make a simulation run
 
-
+#comment from pycharm
 
 #get ready for TraCl
 import os, sys
